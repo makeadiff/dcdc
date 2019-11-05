@@ -11,7 +11,8 @@ export default new Vuex.Store({
     state: {
         surveys: [],
         index: 0,
-        survey_id: 0
+        survey_id: 0,
+        student: {}
     },
 
     mutations: {
@@ -21,11 +22,16 @@ export default new Vuex.Store({
 
         SET_INDEX (state, index) {
             Vue.set(state, 'index', index)
+        },
+
+        SET_STUDENT (state, student) {
+            Vue.set(state, 'student', student)
         }
     },
 
     actions: {
         LOAD_SURVEYS (state) {
+            NProgress.start();
             axios({
                 url: api_graphql_url,
                 method: 'post',
@@ -42,6 +48,7 @@ export default new Vuex.Store({
                     }`
                 }
             }).then(function (response) {
+                NProgress.done();
                 if(response.status == 200) {
                     state.commit('SET_SURVEYS', response.data.data.survey_template.surveys);
                 }
@@ -49,7 +56,7 @@ export default new Vuex.Store({
         },
 
         LOAD_SINGLE_SURVEY (state, survey_id) {
-            console.log(survey_id)
+            NProgress.start();
             axios({
                 url: api_graphql_url,
                 method: 'post',
@@ -66,8 +73,33 @@ export default new Vuex.Store({
                     }`
                 }
             }).then(function (response) {
+                NProgress.done();
                 if(response.status == 200 && typeof response.data !== 'undefined') {
                     state.commit('SET_SURVEYS', [response.data.data.survey]);
+                }
+            });
+        },
+
+        SEARCH_STUDENT(state, search) {
+            NProgress.start();
+            const student_id = search.id;
+
+            if(!student_id) return;
+            axios({
+                url: api_graphql_url,
+                method: 'post',
+                data: {
+                    query: `{
+                      student(id:${student_id}) {
+                        id
+                        name
+                      }
+                    }`
+                }
+            }).then(function (response) {
+                NProgress.done();
+                if(response.status == 200 && typeof response.data !== 'undefined') {
+                    state.commit('SET_STUDENT', response.data.data.student);
                 }
             });
         },
@@ -108,5 +140,9 @@ export default new Vuex.Store({
         getSurvey: (state) => () => {
             return state.surveys[state.index];
         },
+
+        getStudent: (state) => () => {
+            return state.student;
+        }
     }
 });
