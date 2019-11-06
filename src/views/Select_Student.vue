@@ -1,27 +1,20 @@
 <template>
-  <div class="survey container">
+  <div class="select-student container">
     <h2>Survey: {{ survey.name }}</h2>
-    <h3>{{ student.name }}</h3>
 
-    <div class="survey-area" v-show="student.id">
-        {{ student.id }} : {{ student.name }}
-        <!--
-        <survey> component.
-        For Loop <question> component.
-            For loop <option> component
-            OR <input> / <textarea>
-
-        OR 
-
-        Statically put in the entire questionare
-        -->
+    <div class="form" v-show="!student.id">
+        <form method="post">
+            <label for="student_id">Enter data for the student with ID...</label><br />
+            <input type="text" name="student_id" id="student_id" class="form-control" placeholder="Student Name/ID" v-model="student_id_name" />
+            <input type="button" name="action" value="Enter Data..." class="btn btn-primary" v-on:click="this.searchStudent" />
+        </form>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-    name: 'Survey',
+    name: 'Select_Student',
     created () {
         this.$store.subscribe((mutation) => {
             if(mutation.type == 'SET_SURVEYS') {
@@ -34,6 +27,11 @@ export default {
 
             } else if(mutation.type == 'SET_STUDENT') {
                 this.student = this.$store.getters.getStudent();
+
+                if(this.student) {
+                    // this.$router.push({ name: 'survey', params: { survey_id: this.survey_id, student_id: this.student.id } })
+                    this.$router.push({ path: `/survey/${this.survey.id}/student/${this.student.id}` })
+                }
             }
         });
 
@@ -43,11 +41,6 @@ export default {
         } else {
             [this.index, this.survey] = this.$store.getters.searchSurveyById(this.$route.params.survey_id);
             this.$store.dispatch('SET_SURVEY_INDEX', this.index);
-        }
-
-        this.student = this.$store.getters.getStudent()
-        if(!this.student) {
-
         }
     },
     data () {

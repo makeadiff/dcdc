@@ -10,7 +10,7 @@ let api_graphql_url = 'http://localhost/MAD/api/public/graphql';
 export default new Vuex.Store({
     state: {
         surveys: [],
-        index: 0,
+        survey_index: 0,
         survey_id: 0,
         student: {}
     },
@@ -20,8 +20,8 @@ export default new Vuex.Store({
             Vue.set(state, 'surveys', surveys);
         },
 
-        SET_INDEX (state, index) {
-            Vue.set(state, 'index', index)
+        SET_SURVEY_INDEX (state, survey_index) {
+            Vue.set(state, 'survey_index', survey_index)
         },
 
         SET_STUDENT (state, student) {
@@ -104,14 +104,14 @@ export default new Vuex.Store({
             });
         },
 
-        SET_INDEX (state, index) {
-            state.commit('SET_INDEX', index);
+        SET_SURVEY_INDEX (state, survey_index) {
+            state.commit('SET_SURVEY_INDEX', survey_index);
         },
 
     },
 
     getters: {
-        getAll: (state) => () => {
+        getAllSurvey: (state) => () => {
             return state.surveys;
         },
 
@@ -119,7 +119,7 @@ export default new Vuex.Store({
             return state.surveys.length;
         },
 
-        searchById: (state) => (id) => {
+        searchSurveyById: (state) => (id) => {
             for(var i in state.surveys) {
                 if(state.surveys[i].id == id) {
                     return [Number(i), state.surveys[i]];
@@ -129,16 +129,16 @@ export default new Vuex.Store({
             return [];
         },
 
-        getByIndex: (state) => (index) => {
-            return state.surveys[index];
+        getSurveyByIndex: (state) => (survey_index) => {
+            return state.surveys[survey_index];
         },
 
-        getIndex: (state) => () => {
-            return state.index;
+        getSurveyIndex: (state) => () => {
+            return state.survey_index;
         },
 
         getSurvey: (state) => () => {
-            return state.surveys[state.index];
+            return state.surveys[state.survey_index];
         },
 
         getStudent: (state) => () => {

@@ -5,7 +5,7 @@
     <div class="surveys">
         <ul>
             <li v-for="survey in surveys" v-bind:key="survey.id" v-bind:survey="survey">
-            	<router-link v-bind:to="{ path: '/survey/' + survey.id }">{{ survey.name }}</router-link>
+            	<router-link v-bind:to="{ path: `/survey/${survey.id}/student/select` }">{{ survey.name }}</router-link>
             </li>
         </ul>
     </div>
