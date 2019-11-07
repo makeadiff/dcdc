@@ -4,24 +4,34 @@ import axios from 'axios'
 
 Vue.use(Vuex);
 
-let api_base_url = "http://localhost/MAD/api/v1/";
+let api_base_url = "http://localhost/MAD/api/v1";
 let api_graphql_url = 'http://localhost/MAD/api/public/graphql';
+let api_auth = {
+    username: 'data.simulation@makeadiff.in',
+    password: 'pass'
+}
+
+// :TODO: Surveys should be changed survey - store single active
 
 export default new Vuex.Store({
     state: {
-        surveys: [],
-        survey_index: 0,
-        survey_id: 0,
+        questions: [],
+        all_surveys: [],
+        survey: {},
         student: {}
     },
 
     mutations: {
-        SET_SURVEYS (state, surveys) {
-            Vue.set(state, 'surveys', surveys);
+        SET_QUESTIONS (state, questions) {
+            Vue.set(state, 'questions', questions);
         },
 
-        SET_SURVEY_INDEX (state, survey_index) {
-            Vue.set(state, 'survey_index', survey_index)
+        SET_SURVEY_LIST (state, all_surveys) {
+            Vue.set(state, 'all_surveys', all_surveys);
+        },
+
+        SET_SURVEY (state, survey) {
+            Vue.set(state, 'survey', survey);
         },
 
         SET_STUDENT (state, student) {
@@ -30,7 +40,7 @@ export default new Vuex.Store({
     },
 
     actions: {
-        LOAD_SURVEYS (state) {
+        LOAD_ALL_SURVEYS (state) {
             NProgress.start();
             axios({
                 url: api_graphql_url,
@@ -50,7 +60,7 @@ export default new Vuex.Store({
             }).then(function (response) {
                 NProgress.done();
                 if(response.status == 200) {
-                    state.commit('SET_SURVEYS', response.data.data.survey_template.surveys);
+                    state.commit('SET_SURVEY_LIST', response.data.data.survey_template.surveys);
                 }
             });
         },
@@ -75,7 +85,46 @@ export default new Vuex.Store({
             }).then(function (response) {
                 NProgress.done();
                 if(response.status == 200 && typeof response.data !== 'undefined') {
-                    state.commit('SET_SURVEYS', [response.data.data.survey]);
+                    state.commit('SET_SURVEY', response.data.data.survey);
+                }
+            });
+        },
+
+        LOAD_SURVEY_QUESTIONS (state, survey_template_id) {
+            NProgress.start();
+            let dc_survey_template_id = 13
+            axios({
+                // Not working right now - because CORS
+                // url: api_base_url + `/survey_templates/${survey_template_id}/categorized_questions`,
+                // method: 'get',
+                // withCredentials: true,
+                // auth: api_auth
+                url: api_graphql_url,
+                method: 'post',
+                data: {
+                    query: `{
+                        survey_template(id:${dc_survey_template_id}) {
+                            id
+                            name
+                            questions {
+                                id
+                                question
+                                description
+                                required
+                                options
+                                response_type
+                                choices {
+                                    id
+                                    name
+                                }
+                            }
+                        }
+                    }`
+                }
+            }).then(function (response) {
+                NProgress.done();
+                if(response.status == 200 && typeof response.data !== 'undefined') {
+                    state.commit('SET_QUESTIONS', response.data.data.survey_template.questions);
                 }
             });
         },
@@ -103,42 +152,33 @@ export default new Vuex.Store({
                 }
             });
         },
-
-        SET_SURVEY_INDEX (state, survey_index) {
-            state.commit('SET_SURVEY_INDEX', survey_index);
-        },
-
     },
 
     getters: {
-        getAllSurvey: (state) => () => {
-            return state.surveys;
+        getQuestions: (state) => () => {
+            return state.questions
+        },
+
+        getAllSurveys: (state) => () => {
+            return state.all_surveys;
         },
 
         getSurveyCount: (state) => () => {
-            return state.surveys.length;
+            return state.all_surveys.length;
         },
 
         searchSurveyById: (state) => (id) => {
-            for(var i in state.surveys) {
-                if(state.surveys[i].id == id) {
-                    return [Number(i), state.surveys[i]];
+            for(var i in state.all_surveys) {
+                if(state.all_surveys[i].id == id) {
+                    return state.all_surveys[i];
                 }
             }
 
-            return [];
-        },
-
-        getSurveyByIndex: (state) => (survey_index) => {
-            return state.surveys[survey_index];
-        },
-
-        getSurveyIndex: (state) => () => {
-            return state.survey_index;
+            return false;
         },
 
         getSurvey: (state) => () => {
-            return state.surveys[state.survey_index];
+            return state.survey;
         },
 
         getStudent: (state) => () => {

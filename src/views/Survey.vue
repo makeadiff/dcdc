@@ -4,75 +4,60 @@
     <h3>{{ student.name }}</h3>
 
     <div class="survey-area" v-show="student.id">
-        {{ student.id }} : {{ student.name }}
-        <!--
-        <survey> component.
-        For Loop <question> component.
-            For loop <option> component
-            OR <input> / <textarea>
-
-        OR 
-
-        Statically put in the entire questionare
-        -->
+        <Question v-for="question in questions" v-bind:key="question.id" v-bind:question="question"></Question>
     </div>
   </div>
 </template>
 
 <script>
+import Question from '@/components/Question'
+
 export default {
     name: 'Survey',
     created () {
         this.$store.subscribe((mutation) => {
-            if(mutation.type == 'SET_SURVEYS') {
-                [this.index, this.survey] = this.$store.getters.searchSurveyById(this.$route.params.survey_id);
-                if(this.index) this.$store.dispatch('SET_SURVEY_INDEX', this.index);
-
-            } else if(mutation.type == 'SET_SURVEY_INDEX') {
-                this.survey = this.$store.getters.getSurvey();
-                this.index = this.$store.getters.getSurveyIndex();
+            if(mutation.type == 'SET_SURVEY') {
+                this.survey = this.$store.getters.getSurvey()
+                this.$store.dispatch('LOAD_SURVEY_QUESTIONS', this.survey.template.id);
 
             } else if(mutation.type == 'SET_STUDENT') {
                 this.student = this.$store.getters.getStudent();
+
+            } else if(mutation.type == 'SET_QUESTIONS') {
+                this.questions = this.$store.getters.getQuestions();
             }
         });
 
-        const survey_count = this.$store.getters.getSurveyCount();
-        if(!survey_count) { // URL called directly - nothing in the entries library
+        this.survey = this.$store.getters.getSurvey();
+        if(!this.survey.id) { // URL called directly - nothing in the entries library
             this.$store.dispatch('LOAD_SINGLE_SURVEY', this.$route.params.survey_id);
-        } else {
-            [this.index, this.survey] = this.$store.getters.searchSurveyById(this.$route.params.survey_id);
-            this.$store.dispatch('SET_SURVEY_INDEX', this.index);
         }
 
         this.student = this.$store.getters.getStudent()
-        if(!this.student) {
+        if(!this.student.id) {
+            this.$store.dispatch('SEARCH_STUDENT', {'id': this.$route.params.student_id });
+        }
 
+        this.questions = this.$store.getters.getQuestions()
+        if(!this.questions && this.survey) {
+            this.$store.dispatch('LOAD_SURVEY_QUESTIONS', this.survey.template.id);
         }
     },
     data () {
         return {
             survey: {},
-            index: 0,
-            student_id_name: "11453",
             student: {
                 id: 0,
                 name: ""
-            }
+            },
+            questions: []
         }
     },
     methods: {
-        searchStudent(e) {
-            if(!isNaN(this.student_id_name)) {
-                this.student_id = this.student_id_name;
-            }
-
-            if(this.student_id) {
-                this.$store.dispatch('SEARCH_STUDENT', {"id": this.student_id});
-            } else if(this.student_id_name) {
-                this.$store.dispatch('SEARCH_STUDENT', {"name": this.student_id_name});
-            }
-        }
+        
+    },
+    components: {
+        Question
     }
 }
 </script>
