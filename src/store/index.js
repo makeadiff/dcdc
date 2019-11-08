@@ -18,24 +18,31 @@ export default new Vuex.Store({
         questions: [],
         all_surveys: [],
         survey: {},
-        student: {}
+        student: {},
+        responses: {}
     },
 
     mutations: {
         SET_QUESTIONS (state, questions) {
-            Vue.set(state, 'questions', questions);
+            Vue.set(state, 'questions', questions)
         },
 
         SET_SURVEY_LIST (state, all_surveys) {
-            Vue.set(state, 'all_surveys', all_surveys);
+            Vue.set(state, 'all_surveys', all_surveys)
         },
 
         SET_SURVEY (state, survey) {
-            Vue.set(state, 'survey', survey);
+            Vue.set(state, 'survey', survey)
         },
 
         SET_STUDENT (state, student) {
             Vue.set(state, 'student', student)
+        },
+        
+        SET_RESPONSE(state, response) {
+            let existing_responses = state.responses
+            existing_responses[response.question_id] = response
+            Vue.set(state, 'responses', existing_responses)
         }
     },
 
@@ -53,6 +60,10 @@ export default new Vuex.Store({
                         surveys {
                           id
                           name
+                          template {
+                              id
+                              name
+                            }
                         }
                       }
                     }`
@@ -85,6 +96,7 @@ export default new Vuex.Store({
             }).then(function (response) {
                 NProgress.done();
                 if(response.status == 200 && typeof response.data !== 'undefined') {
+                    // console.log(response.data.data.survey, 'LOAD_SINGLE_SURVEY')
                     state.commit('SET_SURVEY', response.data.data.survey);
                 }
             });
@@ -152,6 +164,52 @@ export default new Vuex.Store({
                 }
             });
         },
+
+        SAVE_RESPONSES(state) {
+            console.log("SAVE_RESPONSES")
+            const survey = this.getters.getSurvey()
+            const student = this.getters.getStudent()
+            if(!survey || !student) return false;
+
+            const raw_responses = this.getters.getResponses()
+            if(!raw_responses) return false;
+
+            let added_by = 0
+            let responses = [];
+            for(let question_id in raw_responses) {
+                const row = raw_responses[question_id]
+                if(!added_by) added_by = row.added_by_user_id
+                responses.push(`{
+                    question_id: ${row.question_id},
+                    response: "${row.response}",
+                    choice_id: ${row.choice_id}
+                }`);
+            }
+            const responses_json = responses.join(",")
+
+            if(!responses.length) return false;
+
+            NProgress.start();
+            axios({
+                url: api_graphql_url,
+                method: 'post',
+                data: {
+                    query: `mutation {
+                        saveSurveyResponses(
+                            survey_id: ${survey.id}, 
+                            responder_id: ${student.id}, 
+                            added_by_user_id: ${added_by},
+                            responses: [${responses_json}]
+                        )
+                    }`
+                }
+            }).then(function (response) {
+                NProgress.done();
+                if(response.status == 200 && typeof response.data !== 'undefined') {
+                    console.log(response.data)
+                }
+            });
+        }
     },
 
     getters: {
@@ -183,6 +241,10 @@ export default new Vuex.Store({
 
         getStudent: (state) => () => {
             return state.student;
+        },
+
+        getResponses: (state) => () => {
+            return state.responses;
         }
     }
 });

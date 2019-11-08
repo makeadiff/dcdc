@@ -4,7 +4,11 @@
     <h3>{{ student.name }}</h3>
 
     <div class="survey-area" v-show="student.id">
-        <Question v-for="question in questions" v-bind:key="question.id" v-bind:question="question"></Question>
+        <Question v-for="question in questions" v-bind:key="question.id" v-bind:question="question" v-bind:survey="survey"></Question>
+    </div>
+
+    <div class="action">
+        <button v-on:click="saveSurvey" class="btn btn-primary">Save Responses</button>
     </div>
   </div>
 </template>
@@ -39,7 +43,7 @@ export default {
         }
 
         this.questions = this.$store.getters.getQuestions()
-        if(!this.questions && this.survey) {
+        if(!this.questions.length && this.survey && this.survey.template) {
             this.$store.dispatch('LOAD_SURVEY_QUESTIONS', this.survey.template.id);
         }
     },
@@ -54,7 +58,10 @@ export default {
         }
     },
     methods: {
-        
+        saveSurvey() {
+            console.log("Saving...")
+            this.$store.dispatch('SAVE_RESPONSES')
+        }
     },
     components: {
         Question
