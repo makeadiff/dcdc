@@ -79,7 +79,7 @@ export default {
         };
     },
     methods: {
-        searchStudent(e) {
+        searchStudent() {
             if (!isNaN(this.student_id_name)) {
                 this.$store.dispatch("SEARCH_STUDENT", {
                     id: this.student_id_name

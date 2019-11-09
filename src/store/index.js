@@ -1,15 +1,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import NProgress from "nprogress"
 
 Vue.use(Vuex);
 
-let api_base_url = "http://localhost/MAD/api/v1";
+// let api_graphql_url = "http://testing.makeadiff.in/api/public/graphql";
 let api_graphql_url = "http://localhost/MAD/api/public/graphql";
-let api_auth = {
-    username: "data.simulation@makeadiff.in",
-    password: "pass"
-};
+// let api_base_url = "http://localhost/MAD/api/v1";
+// let api_auth = {
+//     username: "data.simulation@makeadiff.in",
+//     password: "pass"
+// };
 
 // :TODO: Surveys should be changed survey - store single active
 
@@ -186,8 +188,7 @@ export default new Vuex.Store({
             });
         },
 
-        SAVE_RESPONSES(state) {
-            console.log("SAVE_RESPONSES");
+        SAVE_RESPONSES() {
             const survey = this.getters.getSurvey();
             const student = this.getters.getStudent();
             if (!survey || !student) return false;
