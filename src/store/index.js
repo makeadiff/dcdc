@@ -19,6 +19,7 @@ export default new Vuex.Store({
         all_surveys: [],
         survey: {},
         student: {},
+        student_list: [],
         responses: {}
     },
 
@@ -37,6 +38,10 @@ export default new Vuex.Store({
 
         SET_STUDENT (state, student) {
             Vue.set(state, 'student', student)
+        },
+
+        SET_STUDENT_LIST (state, student_list) {
+            Vue.set(state, 'student_list', student_list)
         },
         
         SET_RESPONSE(state, response) {
@@ -142,10 +147,9 @@ export default new Vuex.Store({
         },
 
         SEARCH_STUDENT(state, search) {
-            NProgress.start();
             const student_id = search.id;
-
             if(!student_id) return;
+            NProgress.start();
             axios({
                 url: api_graphql_url,
                 method: 'post',
@@ -160,7 +164,7 @@ export default new Vuex.Store({
             }).then(function (response) {
                 NProgress.done();
                 if(response.status == 200 && typeof response.data !== 'undefined') {
-                    state.commit('SET_STUDENT', response.data.data.student);
+                    state.commit('SET_STUDENT_LIST', [response.data.data.student]);
                 }
             });
         },
@@ -241,6 +245,10 @@ export default new Vuex.Store({
 
         getStudent: (state) => () => {
             return state.student;
+        },
+
+        getStudentList: (state) => () => {
+            return state.student_list;
         },
 
         getResponses: (state) => () => {

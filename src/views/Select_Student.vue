@@ -9,6 +9,14 @@
             <input type="button" name="action" value="Enter Data..." class="btn btn-primary" v-on:click="this.searchStudent" />
         </form>
     </div>
+
+    <div v-show="student_list.length">
+        <ul>
+            <li v-for="stu in student_list" v-bind:key="stu.id">
+                <a href="#" v-on:click="selectStudent(stu)">{{ stu.name }}</a>
+            </li>
+        </ul>
+    </div>
   </div>
 </template>
 
@@ -26,6 +34,8 @@ export default {
                 if(this.student) {
                     this.$router.push({ path: `/survey/${this.survey.id}/student/${this.student.id}` })
                 }
+            } else if(mutation.type == 'SET_STUDENT_LIST') {
+                this.student_list = this.$store.getters.getStudentList();
             }
         });
 
@@ -42,7 +52,8 @@ export default {
             student: {
                 id: 0,
                 name: ""
-            }
+            },
+            student_list: []
         }
     },
     methods: {
@@ -50,8 +61,11 @@ export default {
             if(!isNaN(this.student_id_name)) {
                 this.$store.dispatch('SEARCH_STUDENT', {"id": this.student_id_name});
             } else if(this.student_id_name) {
-                this.$store.dispatch('SEARCH_STUDENT', {"name": this.student_id_name});
+                this.$store.dispatch('SEARCH_STUDENT', {"name": this.student_id_name, "city_id": current_user.city_id});
             }
+        },
+        selectStudent(student) {
+            this.$store.commit('SET_STUDENT', student);
         }
     }
 }
