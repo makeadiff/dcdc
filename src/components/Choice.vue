@@ -9,10 +9,10 @@
 <script>
 export default {
     name: "Choice",
-    data () {
+    data() {
         return {
             input: ""
-        }
+        };
     },
     props: {
         choice: Object
@@ -20,5 +20,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
