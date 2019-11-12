@@ -26,6 +26,7 @@
         </div>
 
         <div v-show="student_list.length">
+            <h3>Select Student you wish to enter the data for...</h3>
             <ul>
                 <li v-for="stu in student_list" v-bind:key="stu.id">
                     <a href="#" v-on:click="selectStudent(stu)">{{
