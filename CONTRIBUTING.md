@@ -6,7 +6,10 @@ This guide assumes that you have a github account and a basic understanding of h
 
 ## Setup
 
-First, **fork the project to your personal account**. Go to the github page for [this project](https://github.com/makeadiff/dcdc) and click on the Fork button ot the top right cornor. This will create a copy of the repository in your personal account.
+First, **fork the project to your personal account**. 
+
+How to Fork ?
+Go to the github page for [this project](https://github.com/makeadiff/dcdc) and click on the Fork button to the top right cornor. This will create a copy of the repository in your personal account.
 
 Now **clone the forked project to your system**...
 
