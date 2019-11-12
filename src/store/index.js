@@ -5,15 +5,13 @@ import NProgress from "nprogress"
 
 Vue.use(Vuex);
 
-// let api_graphql_url = "http://testing.makeadiff.in/api/public/graphql";
-let api_graphql_url = "http://localhost/MAD/api/public/graphql";
+let api_graphql_url = "http://testing.makeadiff.in/api/public/graphql";
+// let api_graphql_url = "http://localhost/MAD/api/public/graphql";
 // let api_base_url = "http://localhost/MAD/api/v1";
 // let api_auth = {
 //     username: "data.simulation@makeadiff.in",
 //     password: "pass"
 // };
-
-// :TODO: Surveys should be changed survey - store single active
 
 export default new Vuex.Store({
     state: {
@@ -78,10 +76,7 @@ export default new Vuex.Store({
             }).then(function(response) {
                 NProgress.done();
                 if (response.status == 200) {
-                    state.commit(
-                        "SET_SURVEY_LIST",
-                        response.data.data.survey_template.surveys
-                    );
+                    state.commit("SET_SURVEY_LIST", response.data.data.survey_template.surveys);
                 }
             });
         },
@@ -219,7 +214,7 @@ export default new Vuex.Store({
                     query: `mutation {
                         saveSurveyResponses(
                             survey_id: ${survey.id}, 
-                            responder_id: ${student.id}, 
+                            responder_id: ${student.id},
                             added_by_user_id: ${added_by},
                             responses: [${responses_json}]
                         )
