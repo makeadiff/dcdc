@@ -16,3 +16,8 @@ module.exports = {
         current_user: "readonly"
     }
 };
+
+/*
+    Rules:
+      "function-paren-newline": ["error", "never"]
+ */
