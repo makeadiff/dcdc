@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import NProgress from "nprogress"
+import NProgress from "nprogress";
 
 Vue.use(Vuex);
 
@@ -76,7 +76,10 @@ export default new Vuex.Store({
             }).then(function(response) {
                 NProgress.done();
                 if (response.status == 200) {
-                    state.commit("SET_SURVEY_LIST", response.data.data.survey_template.surveys);
+                    state.commit(
+                        "SET_SURVEY_LIST",
+                        response.data.data.survey_template.surveys
+                    );
                 }
             });
         },
@@ -112,7 +115,7 @@ export default new Vuex.Store({
 
         LOAD_SURVEY_QUESTIONS(state, survey_template_id) {
             NProgress.start();
-            let dc_survey_template_id = 13;
+            let dc_survey_template_id = survey_template_id;
             axios({
                 // Not working right now - because CORS
                 // url: api_base_url + `/survey_templates/${survey_template_id}/categorized_questions`,
@@ -213,7 +216,7 @@ export default new Vuex.Store({
                 data: {
                     query: `mutation {
                         saveSurveyResponses(
-                            survey_id: ${survey.id}, 
+                            survey_id: ${survey.id},
                             responder_id: ${student.id},
                             added_by_user_id: ${added_by},
                             responses: [${responses_json}]
