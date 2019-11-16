@@ -1,28 +1,29 @@
 <template>
-    <div class="select-student container">
+    <div class="select-student survey container">
         <h2>Survey: {{ survey.name }}</h2>
-
-        <div class="form" v-show="!student.id">
-            <form method="post">
-                <label for="student_id"
-                    >Enter data for the student with ID...</label
-                ><br />
-                <input
-                    type="text"
-                    name="student_id"
-                    id="student_id"
-                    class="form-control"
-                    placeholder="Student Name/ID"
-                    v-model="student_id_name"
-                />
-                <input
-                    type="button"
-                    name="action"
-                    value="Enter Data..."
-                    class="btn btn-primary"
-                    v-on:click="this.searchStudent"
-                />
-            </form>
+        <div class="question-area">
+            <div class="form" v-show="!student.id">
+                <form method="post">
+                    <label for="student_id"
+                        >Enter data for the student with ID...</label
+                    ><br />
+                    <input
+                        type="text"
+                        name="student_id"
+                        id="student_id"
+                        class="form-control"
+                        placeholder="Student Name/ID"
+                        v-model="student_id_name"
+                    />
+                    <input
+                        type="button"
+                        name="action"
+                        value="Enter Data..."
+                        class="btn btn-primary"
+                        v-on:click="this.searchStudent"
+                    />
+                </form>
+            </div>
         </div>
 
         <div v-show="student_list.length">

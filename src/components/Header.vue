@@ -44,7 +44,9 @@
                     <img src="https://picsum.photos/id/237/200/300" />
                 </div>
                 <span class="user_name"> </span>
-                <li><a href="index.php">Logout</a></li>
+                <li>
+                    <a href="index.php">Logout</a>
+                </li>
             </form>
         </div>
     </nav>
