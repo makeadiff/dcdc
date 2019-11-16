@@ -13,7 +13,7 @@
                         v-bind:value="choice.id"
                         v-bind:key="choice.id"
                         v-model="answer"
-                        :name="'question-response-' + question.id"
+                        v-bind:name="'question-response' + question.id"
                     />
                     {{ choice.name }}
                 </label>

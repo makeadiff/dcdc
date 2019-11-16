@@ -27,14 +27,3 @@ export default {
     }
 };
 </script>
-
-<style scoped lang="scss">
-.question {
-    font-size: 1.2em;
-}
-
-.question-description {
-    font-size: 0.8em;
-    color: #999;
-}
-</style>
