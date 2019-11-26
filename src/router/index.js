@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Survey from "../views/Survey.vue";
 import Select_Student from "../views/Select_Student.vue";
+import Contributors from "../views/Contributors.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,10 @@ const routes = [
         path: "/survey/:survey_id/student/:student_id",
         component: Survey,
         props: true
+    },
+    {
+        path: "/contributors",
+        component: Contributors
     },
     {
         path: "/about",
