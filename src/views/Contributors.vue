@@ -18,4 +18,12 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+ol,
+ul,
+dl {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    list-style: none;
+}
+</style>
