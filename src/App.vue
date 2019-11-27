@@ -1,23 +1,25 @@
 <template>
     <div id="app">
-        <Header msg="Hello" />
-        <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div> -->
-        <div id="body" class="containter">
+        <MSuiteHeader
+            app_name="DC/DC"
+            app_logo=""
+            base_app_url="/"
+            v-bind:user="{
+                name: 'Binny',
+                profile_image: 'https://picsum.photos/id/11/200/300',
+                groups: 'Director, Technology'
+            }"
+        >
+        </MSuiteHeader>
+        <Container>
             <router-view />
-        </div>
+        </Container>
     </div>
 </template>
 
 <script>
-import Header from "@/components/Header";
-
 export default {
     name: "App",
-    components: {
-        Header
-    }
+    components: {}
 };
 </script>
