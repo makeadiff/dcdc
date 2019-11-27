@@ -4,9 +4,7 @@
         <div class="question-area">
             <div class="form" v-show="!student.id">
                 <form method="post">
-                    <label for="student_id"
-                        >Enter data for the student with ID...</label
-                    ><br />
+                    <label for="student_id">Enter data for the student with ID...</label><br />
                     <input
                         type="text"
                         name="student_id"

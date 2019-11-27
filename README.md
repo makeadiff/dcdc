@@ -8,6 +8,20 @@ This tool is the front end of a survey creation mechanism - think Google Forms. 
 
 ## Project Setup
 
+This app is the front end of the survey system. It takes Survey details, questions, etc from the MAD DB using the API system. We are using Vuex to manage state when doing this.
+
+### Tech Used
+
+- [VueJS](https://vuejs.org/) - JS Framework
+- [Vuex](https://vuex.vuejs.org/) - State management system for Vue
+- [Vue Router](https://router.vuejs.org/) - Router for Vue
+- [Axios](https://github.com/axios/axios) - HTTP Client - for making AJAX calls
+- [Core-JS](https://github.com/zloirock/core-js)
+- [Bootstrap](https://getbootstrap.com/) - UI Framework
+- [NProgress](https://ricostacruz.com/nprogress/) - Progress indicator plugin
+- [ESLint](https://eslint.org/) - Code style enforcing / linting.
+- Etc.
+
 ### Requirements
 
 You'll need the following things in your system to work on this project...
